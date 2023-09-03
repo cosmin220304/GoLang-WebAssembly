@@ -1,0 +1,32 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="wasm_exec.js"></script>
+  <script>
+    const go = new Go();
+
+    // Load and run the Go program
+    async function runGoProgram() {
+      const { instance } = await WebAssembly.instantiateStreaming(fetch("json.wasm"), go.importObject);
+      go.run(instance);
+    }
+
+    // Call the getFullName function after Go program is loaded
+    async function callGetFullName() {
+      await runGoProgram();
+      const fullname = getFullName("Cosmin", "Aftanase");
+      document.getElementById("fullname").textContent = fullname
+    }
+
+    // Wait for the document to be fully loaded before calling the function
+    document.addEventListener("DOMContentLoaded", callGetFullName);
+  </script>
+</head>
+
+<body>
+  Hello <span id="fullname"></span>
+</body>
+
+
+</html>
